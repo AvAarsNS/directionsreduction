@@ -25,7 +25,7 @@ describe("This is the reduceDirections function. This function removes any unnec
         stubs.standStill
       );
     });
-    it("North, est, west, south -> stand still", () => {
+    it("North, east, west, south -> stand still", () => {
       expect(reduceDirections(stubs.northEastWestSouth)).toEqual(
         stubs.standStill
       );
