@@ -11,16 +11,26 @@ export function areDirectionsUnnecessary(first: Direction, second: Direction) {
   return unnecessaryDirections.some(([a, b]) => a === first && b === second);
 }
 
-export function reduceDirections(directions: Direction[]): Direction[] {
-  const result: Direction[] = [];
-  let i = 0;
-  do {
-    if (areDirectionsUnnecessary(directions[i], directions[i + 1])) {
-      i += 2;
-    } else {
-      result.push(directions[i]);
-      i += 1;
-    }
-  } while (i < directions.length);
+function removeUnnecessaryDirections(directions: Direction[]): Direction[] {
+  const result = [...directions];
+
+  const index = directions.findIndex((_, i) =>
+    areDirectionsUnnecessary(directions[i], directions[i + 1])
+  );
+
+  if (index !== -1) result.splice(index, 2);
+
   return result;
+}
+
+export function reduceDirections(directions: Direction[]): Direction[] {
+  let before = [...directions];
+  let after = [...directions];
+
+  do {
+    before = after;
+    after = removeUnnecessaryDirections(before);
+  } while (JSON.stringify(before) !== JSON.stringify(after));
+
+  return after;
 }
